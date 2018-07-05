@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js">
+        </script>
+        
+        <script src="controller.js"></script>
+        
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        
+    </head>
+    <body ng-app="myApp" ng-controller="myController" >
+        <h3>Hello World!</h3>
+        <input type="button" value="Show" ng-click="getAllUserInfo()">
+        <table>
+        <tr ng-repeat = "user in userinfo">
+            <td>Name: {{user.first_name}} {{user.last_name}}</td>
+            <td>Age : {{user.age}}</td>
+            <td>User: {{user.username}}</td>
+        </tr>
+        <table>
+    </body>
+</html>
