@@ -13,3 +13,12 @@ exports.addTest = function(req,res) {
         }
     });
 }
+exports.getRelatedQuestion = function(req,res) {
+    modelObj.getRelatedQuest(req, res, function(err, result) {
+        if (err) {
+            res.status(400).json({ message: 'Failure' });
+          } else {
+            res.status(200).json(result);
+          }
+    })
+}

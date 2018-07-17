@@ -17,3 +17,21 @@ exports.addUser = function(req, res, cbk) {
         cbk(null,result);
     });
 }
+exports.getRelatedQuest = function(req, res, cbk) {
+  var keyWords = req.body.keyWords.split(" ");
+  var queryArr = [];
+  for(var index = 0; index < keyWords.length; index++) {
+    queryArr.push({title: {$regex: new RegExp(keyWords[index])}});
+  }
+  var query = { $or: queryArr};
+  dbo.collection('questions').find(query).toArray(function(err, result) {
+    if(err) {
+      console.log("Somthing went wrong");
+      cbk(err);
+    }
+    else {
+      console.log(result);
+      cbk(null, result);
+    }
+  });
+}
