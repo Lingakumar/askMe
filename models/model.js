@@ -18,22 +18,9 @@ exports.addUser = function(req, res, cbk) {
     });
 }
 exports.getRelatedQuest = function(req, res, cbk) {
- /* var keyWords = req.body.keyWords.split(" ");
-  var queryArr = [];
-  for(var index = 0; index < keyWords.length; index++) {
-    queryArr.push({title: {$regex: new RegExp(keyWords[index])}});
-  }
-  var query = { $or: queryArr};
-  dbo.collection('questions').find(query).toArray(function(err, result) {
-    if(err) {
-      console.log("Somthing went wrong");
-      cbk(err);
-    }
-    else {
-      console.log(result);
-      cbk(null, result);
-    }
-  });*/
+  var searchTerm = req.body.keyWords;
+  var limit = req.body.limit ? req.body.limit : 5;
+  var pageNumber = req.body.pageNumber ? req.body.pageNumber : 1;
   dbo.ensureIndex("questions", {
     title: "text"
   }, function(err, indexName) {
@@ -45,10 +32,11 @@ exports.getRelatedQuest = function(req, res, cbk) {
     }
   });
   dbo.collection("questions")
-    .find({$text: {$search: req.body.keyWords}}, {score: {$meta: "textScore"}})
+    .find({$text: {$search: searchTerm}}, {score: {$meta: "textScore"}})
     .sort({score: {$meta: "textScore"}})
     .project({ score: { $meta: "textScore" } })
-    .limit(req.body.limit)
+    .limit(limit)
+    .skip((pageNumber - 1) * limit)
     .toArray(function(err, result){
     if(err) {
       console.log("Somthing went wrong");
